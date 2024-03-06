@@ -26,6 +26,15 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import 'react-native-devsettings';
+
+//  https://github.com/welldone-software/why-did-you-render
+if (__DEV__) {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render');
+  whyDidYouRender(React, {
+    trackAllPureComponents: true,
+  });
+}
+
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
