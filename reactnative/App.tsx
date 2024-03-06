@@ -6,123 +6,122 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
+import {Animated, StyleSheet, Text, View, ViewStyle} from 'react-native';
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
+  BottomTabBarButtonProps,
+  BottomTabNavigationOptions,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import 'react-native-devsettings';
 
-//  https://github.com/welldone-software/why-did-you-render
-if (__DEV__) {
-  const whyDidYouRender = require('@welldone-software/why-did-you-render');
-  whyDidYouRender(React, {
-    trackAllPureComponents: true,
-  });
-}
+import {NavBottomTabBar} from './src/components/NavBottomNavBar';
+import {TabBarButton} from './src/components/TabBarButton';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+import {HomeScreen} from './src/screens/HomeScreen';
+import {Screen2} from './src/screens/Screen2';
+import {Screen3} from './src/screens/Screen3';
+import {NavigationContainer} from '@react-navigation/native';
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+type TabBarScreenRoutes = {
+  HomeScreen: undefined;
+  Screen2: undefined;
+  Screen3: undefined;
+};
+const Tab = createBottomTabNavigator<TabBarScreenRoutes>();
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+type Props = {
+  tabBarStyle?: ViewStyle;
+  animationStyles?: Animated.AnimatedProps<ViewStyle>;
+  initialRouteName?: keyof TabBarScreenRoutes | undefined;
+};
+const Tabs: React.FC<Props> = ({initialRouteName = 'HomeScreen'}) => {
+  const tabBarButton = ({props}: {props: BottomTabBarButtonProps}) => {
+    return <TabBarButton props={props} />;
   };
 
+  const tabBarIcon = (focused: boolean, title: string) => {
+    const tabColor = (isFocused: boolean) => (isFocused ? '#000' : '#aaa');
+    return (
+      <View style={styles.tabStyle}>
+        <Text
+          maxFontSizeMultiplier={1.2}
+          numberOfLines={1}
+          style={[styles.tabText, {color: tabColor(focused)}]}>
+          {title}
+        </Text>
+      </View>
+    );
+  };
+
+  const tabBarOptions = (title: string) => {
+    return {
+      tabBarButton: props => tabBarButton({props}),
+      tabBarIcon: ({focused}) => tabBarIcon(focused, title),
+    } as BottomTabNavigationOptions;
+  };
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: styles.tabBar,
+        tabBarItemStyle: styles.tabBarItem,
+        unmountOnBlur: true,
+      }}
+      tabBar={NavBottomTabBar}
+      initialRouteName={initialRouteName}>
+      <Tab.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={tabBarOptions('Home')}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <Tab.Screen
+        name="Screen2"
+        component={Screen2}
+        options={tabBarOptions('2')}
+      />
+      <Tab.Screen
+        name="Screen3"
+        component={Screen3}
+        options={tabBarOptions('3')}
+      />
+    </Tab.Navigator>
+  );
+};
+
+function App(): React.JSX.Element {
+  return (
+    <NavigationContainer>
+      <Tabs />
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  tabBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'transparent',
+    borderTopColor: 'transparent',
+    elevation: 0,
+    marginBottom: 4,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  tabBarItem: {
+    width: 56,
+    height: 56,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  tabText: {
+    marginTop: 4,
   },
-  highlight: {
-    fontWeight: '700',
+  tabStyle: {
+    width: 40,
+    alignItems: 'center',
   },
 });
 
+App.WhyDidYouRender = true;
 export default App;
