@@ -7,6 +7,18 @@ interface BigListProps {
   style: React.CSSProperties;
 }
 
+/**
+ *
+ *
+ *
+ *
+ * Notice that this sandbox will not work with React 17 or above
+ * because of how codesandbox.io implements requires of packages.
+ *
+ * sandbox: http://bit.ly/wdyr-sb
+ *
+ *
+ */
 const BigListPureComponent = React.memo(({ style }: BigListProps) => {
   console.log(
     "BigListPureComponent Re-Render! - We don't want this to happen too often."
@@ -24,14 +36,14 @@ const BigListPureComponent = React.memo(({ style }: BigListProps) => {
 });
 BigListPureComponent.displayName = "BigListPureComponent";
 
-function App() {
+const App = () => {
   const [count, setCount] = React.useState(0);
 
   /* use the hook instead of the const to prevent
    ** "BigListPureComponent" from re-rendering wit this component */
 
   //const bigListStyle = React.useMemo(() => ({ width: "100%" }), []);
-  //const bigListStyle: React.CSSProperties = { width: "100%" };
+  const bigListStyle: React.CSSProperties = { width: "100%" };
 
   return (
     <div className="Main">
@@ -45,11 +57,9 @@ function App() {
           "Increase!" Count: {count}
         </button>
       </div>
-      <BigListPureComponent style={{ width: "100%" }} />
+      <BigListPureComponent style={bigListStyle} />
     </div>
   );
-}
-
-App.whyDidYouRender = true;
+};
 
 export default App;
