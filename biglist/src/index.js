@@ -1,13 +1,24 @@
-import React from "react";
-import "./App.css";
+import "./wdyr";
 
 import { times } from "lodash";
+import React from "react";
+import ReactDOM from "react-dom";
 
-interface BigListProps {
-  style: React.CSSProperties;
-}
+import "./index.scss";
 
-const BigListPureComponent = React.memo(({ style }: BigListProps) => {
+/**
+ *
+ *
+ *
+ *
+ * Notice that this sandbox will not work with React 17 or above
+ * because of how codesandbox.io implements requires of packages.
+ *
+ *
+ *
+ *
+ */
+const BigListPureComponent = React.memo(({ style }) => {
   console.log(
     "BigListPureComponent Re-Render! - We don't want this to happen too often."
   );
@@ -22,16 +33,17 @@ const BigListPureComponent = React.memo(({ style }: BigListProps) => {
     </div>
   );
 });
+
 BigListPureComponent.displayName = "BigListPureComponent";
 
-function App() {
+const Main = () => {
   const [count, setCount] = React.useState(0);
 
   /* use the hook instead of the const to prevent
    ** "BigListPureComponent" from re-rendering wit this component */
 
   //const bigListStyle = React.useMemo(() => ({ width: "100%" }), []);
-  //const bigListStyle: React.CSSProperties = { width: "100%" };
+  const bigListStyle = { width: "100%" };
 
   return (
     <div className="Main">
@@ -45,11 +57,10 @@ function App() {
           "Increase!" Count: {count}
         </button>
       </div>
-      <BigListPureComponent style={{ width: "100%" }} />
+      <BigListPureComponent style={bigListStyle} />
     </div>
   );
-}
+};
 
-App.whyDidYouRender = true;
-
-export default App;
+ReactDOM.render(<Main />, document.getElementById("root"));
+ReactDOM.render(<Main />, document.getElementById("root"));

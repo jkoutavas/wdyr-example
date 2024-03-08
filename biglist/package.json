@@ -1,0 +1,30 @@
+{
+  "name": "why-did-you-render-sandbox",
+  "version": "1.0.0",
+  "description": "The official sandbox of @welldone-software/why-did-you-render.\n\nNotice line 43- This is where style is a new object on each render. You can see this in the console as well.",
+  "keywords": [],
+  "main": "src/index.js",
+  "dependencies": {
+    "@welldone-software/why-did-you-render": "6.2.1",
+    "lodash": "^4",
+    "react": "^16",
+    "react-dom": "^16",
+    "react-scripts": "^5",
+    "sass": "^1.71.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.23.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
